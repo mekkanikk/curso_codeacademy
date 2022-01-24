@@ -1,0 +1,16 @@
+letters = ['r', 'e', 'd', 'u', 'c', 'e']
+
+# your code below:
+
+# remember to import the reduce function
+
+from functools import reduce
+
+word = reduce(lambda x,y: x+y, letters)
+
+# store the result of your reduce function in the variable word
+
+print(word)
+
+
+# print word
