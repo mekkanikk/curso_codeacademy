@@ -1,0 +1,82 @@
+guests = {}
+  
+#1
+def read_guestlist(file_name):
+    text_file = open(file_name,'r')
+    while True:
+        x = yield
+        if x is None:
+          line_data = text_file.readline().strip().split(",")
+        else:
+          line_data = x.split(",")
+        if len(line_data) < 2:
+        # If no more lines, close file
+            text_file.close()
+            break
+        name = line_data[0]
+        age = int(line_data[1])
+        guests[name] = age
+        yield name 
+                                            
+guestlist = read_guestlist('guest_list.txt')
+
+for guest_i in range(10):
+  print(next(guestlist))
+
+#2
+
+next(guestlist)
+guestlist.send("Jane,35")
+
+#3
+
+for guest_i in range(8):
+  print(next(guestlist))
+
+
+#4
+
+def guest_age(guest_dict):
+  for key,val in guest_dict.items():
+    if val > 21:
+      yield key
+
+age_of_guest = guest_age(guests)
+
+for obj in age_of_guest:
+  print(obj)
+
+#5
+
+def table_one():
+  for j in range(1,2):
+    for k in range(1,6):
+      yield "Chicken", "Table {}".format(j),"Seat {}".format(k)
+
+def table_two():
+  for j in range(2,3):
+    for k in range(6,11):
+      yield "Beef", "Table {}".format(j), "Seat {}".format(k)
+
+def table_three():
+  for j in range(3,4):
+    for k in range(11,16):
+      yield "Fish", "Table {}".format(j), "Seat {}".format(k)
+
+
+def combined_tables():
+  yield from table_one()
+  yield from table_two()
+  yield from table_three()
+
+combined_tables = combined_tables()
+#6
+def guest_assignment():
+  for name in guests.keys():
+    yield name, next(combined_tables)
+
+guest_assignment = guest_assignment()
+for person in guest_assignment:
+  print(person)
+
+
