@@ -1,0 +1,95 @@
+# Write your code below: 
+from contextlib import contextmanager
+
+@contextmanager
+def generic(card_type, sender_name, recipient_name):
+  card_file = open(card_type, 'r')
+  new_card_order = open(f"{sender_name}_generic.txt", 'w')
+  try:
+    new_card_order.write(f"Dear {recipient_name},\n")
+    new_card_order.write(card_file.read()+"\n")
+    new_card_order.write(f"\nSincerely, \n{sender_name} \n")
+    yield  new_card_order
+  finally:
+    card_file.close()
+    new_card_order.close()
+print("Task 1")
+print("Generating a 'generic' THANK YOU card using a decorator (containing a generator function) based context manager and the provided 'thankyou_card.txt' file.")
+print()
+
+with generic("thankyou_card.txt", "Mwenda", "Amanda") as new_card:
+  print("Card Generated! \n")
+with open("Mwenda_generic.txt", "r") as new_card1:
+  print(new_card1.read())
+
+print("Starting Task 2")
+print("(It really bothered me to not see the end result of creating an instance object of the class approach context manager, so I added some functionality to include a with statement, an additional variable name and a print statement to read() it, instead of just seeing the object itself, below.)")
+print()
+print("(I learn better if I confirm the intended output of the code block.)")
+print()
+
+class personalized:
+  def __init__(self, sender_name, recipient_name):
+    self.personal_file = open(f"{sender_name}_personalized.txt", "w")
+    self.sender_name = sender_name
+    self.recipient_name = recipient_name
+
+  def __enter__(self):
+    self.personal_file.write(f"\nDear {self.recipient_name},\n")
+    return self.personal_file
+
+  def __exit__(self, *exec):
+    self.personal_file.write(f"\nSincerely \n{self.sender_name}")
+    self.personal_file.close()
+
+print("Task 2")
+print("Using the 'class' to generate three cards:") 
+print("Card 1:")
+print("A 'personalized' card from John to Michael. It is neither a 'THANK YOU' card nor is it a 'BIRTHDAY' card.") 
+print("Cards 2 and 3 are from Josiah") 
+print("Card 2:") 
+print("A 'generic' BIRTHDAY card from Josiah to co-worker Remy, that utilizes the provided 'happy_bday.txt' file") 
+print("Card 3")
+print("A 'personalized' BIRTHDAY card from Josiah to sister Esther, that utilizes a 'write' mode to add content.")
+print()
+with personalized("John", "Michael") as personalized_card:
+  personalized_card.write("I am so proud of you!  Being your friend for all these years has been nothing but a blessing.  I don't say it often but I just wanted to let you know that you inspire me and I love you!  All the best.  Always.")
+  print("1). First 'class' personalized card")
+  print("This is the object that is the result of the class call, the card from John.")
+  print()
+  print(personalized_card)
+  with open('\nJohn_personalized.txt','r') as john_card:
+    print(john_card.read())
+    print()
+
+  
+  print("So this is Josiah's first card, a 'generic' card from him to Remy.  It uses the provided 'happy_bday.txt' file content.  It is the second of the three class calls.")
+  print()
+  
+print()
+  
+
+with generic("happy_bday.txt","Josiah","Remy" ) as generic_card, personalized("Josiah","Esther") as personal2:
+    personal2.write("Happy Birthday!  I love you to the moon and back.  Even though you're a pain sometimes, you're a pain I can't live without.  I am incredibly proud of you and grateful to have you as a sister.  Cheers to 25!!  You're getting old!")
+
+    print("First happy bday from 'happy_bday.txt' file")
+    print(generic_card)
+    print()
+    with open('happy_bday.txt','r') as j_card:
+      print("Dear Remy,")
+      print(j_card.read())
+      print("Sincerely,")
+      print("Josiah")
+      print()
+
+    print("Second happy bday but personalized")
+    print(personal2)
+    with open('\nJosiah_personalized.txt','r') as j_card2:
+      print(j_card2.read())
+
+print()
+print("----------------------------------------")
+print("I was able to print out all the cards of the class based context manager approach, HOWEVER I had to fudge it to print out the first 'Josiah' card (to Remy) from the nested syntax format.  Perhaps someone can point out how I solve this.")
+print()
+print("FYI")
+print("TYPO found in the provided text files for John and Josiah.  There is a comma after the sender name that is grammtically incorrect so I removed it from both files.") 
